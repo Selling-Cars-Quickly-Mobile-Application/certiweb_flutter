@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'public/pages/register/register_page.dart';
+import 'certifications/dashboard/dashboard.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,7 +13,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'CertiWeb',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -28,9 +30,13 @@ class MyApp extends StatelessWidget {
         //
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const RegisterPage(),
+      routes: {
+        '/register': (context) => const RegisterPage(),
+        '/dashboard': (context) => const DashboardPage(),
+      },
     );
   }
 }
