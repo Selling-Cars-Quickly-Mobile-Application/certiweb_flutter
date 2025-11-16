@@ -24,7 +24,8 @@ class AuthService {
           'email': data['email'],
           'plan': data['plan'],
           'isLoggedIn': true,
-          'isAdmin': false
+          'isAdmin': false,
+          'lastLogin': DateTime.now().toIso8601String()
         }.toString());
       }
       return {'success': true, 'user': data};
@@ -94,7 +95,8 @@ class AuthService {
           'name': data['name'],
           'email': data['email'],
           'isLoggedIn': true,
-          'isAdmin': true
+          'isAdmin': true,
+          'lastLogin': DateTime.now().toIso8601String()
         }.toString());
       }
       return {'success': true, 'user': data, 'isAdmin': true};
