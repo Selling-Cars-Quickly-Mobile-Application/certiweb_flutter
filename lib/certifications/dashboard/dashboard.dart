@@ -19,6 +19,12 @@ class _DashboardPageState extends State<DashboardPage> {
 
   Future<void> _loadUser() async {
     final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('authToken');
+    if (token == null) {
+      if (!mounted) return;
+      Navigator.pushReplacementNamed(context, '/login');
+      return;
+    }
     final userStr = prefs.getString('currentUser');
     if (userStr != null) {
       final nameMatch = RegExp("name: (.*?),").firstMatch(userStr);
