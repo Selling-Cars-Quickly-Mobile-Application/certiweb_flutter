@@ -149,7 +149,7 @@ class _RegisterPageState extends State<RegisterPage> with TickerProviderStateMix
                     width: 2,
                   ),
                   boxShadow: index <= _step
-                      ? [BoxShadow(color: primaryGreen.withOpacity(0.3), blurRadius: 12)]
+                      ? [BoxShadow(color: primaryGreen.withValues(alpha: 0.3), blurRadius: 12)]
                       : [],
                 ),
                 child: Center(
@@ -186,7 +186,7 @@ class _RegisterPageState extends State<RegisterPage> with TickerProviderStateMix
     return Card(
       elevation: 8,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      shadowColor: Colors.black.withOpacity(0.15),
+      shadowColor: Colors.black.withValues(alpha: 0.15),
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
@@ -204,8 +204,8 @@ class _RegisterPageState extends State<RegisterPage> with TickerProviderStateMix
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: errorRed.withOpacity(0.1),
-                  border: Border.all(color: errorRed.withOpacity(0.3)),
+                  color: errorRed.withValues(alpha: 0.1),
+                  border: Border.all(color: errorRed.withValues(alpha: 0.3)),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Row(
@@ -225,8 +225,8 @@ class _RegisterPageState extends State<RegisterPage> with TickerProviderStateMix
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: successGreen.withOpacity(0.1),
-                  border: Border.all(color: successGreen.withOpacity(0.3)),
+                  color: successGreen.withValues(alpha: 0.1),
+                  border: Border.all(color: successGreen.withValues(alpha: 0.3)),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Row(
@@ -290,29 +290,27 @@ class _RegisterPageState extends State<RegisterPage> with TickerProviderStateMix
                 ),
               ],
             ),
-            if (_step == 2) ...[
-              const SizedBox(height: 16),
-              Center(
-                child: TextButton(
-                  onPressed: () => Navigator.pushNamed(context, '/login'),
-                  child: RichText(
-                    text: TextSpan(
-                      text: '¿Ya tienes cuenta? ',
-                      style: TextStyle(color: Color(0xFF6b7280)),
-                      children: [
-                        TextSpan(
-                          text: 'Inicia sesión',
-                          style: TextStyle(
-                            color: primaryGreen,
-                            fontWeight: FontWeight.w700,
-                          ),
+            const SizedBox(height: 16),
+            Center(
+              child: TextButton(
+                onPressed: () => Navigator.pushNamed(context, '/login'),
+                child: RichText(
+                  text: TextSpan(
+                    text: '¿Ya tienes una cuenta? ',
+                    style: TextStyle(color: Color(0xFF6b7280)),
+                    children: [
+                      TextSpan(
+                        text: 'Inicia sesión aquí',
+                        style: TextStyle(
+                          color: primaryGreen,
+                          fontWeight: FontWeight.w700,
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ),
-            ],
+            ),
           ],
         ),
       ),
@@ -437,8 +435,8 @@ class _RegisterPageState extends State<RegisterPage> with TickerProviderStateMix
           borderRadius: BorderRadius.circular(16),
           color: isSelected ? Color(0xFFF0F9F4) : Colors.white,
           boxShadow: isSelected
-              ? [BoxShadow(color: primaryGreen.withOpacity(0.15), blurRadius: 20)]
-              : [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 8)],
+              ? [BoxShadow(color: primaryGreen.withValues(alpha: 0.15), blurRadius: 20)]
+              : [BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 8)],
         ),
         padding: const EdgeInsets.all(24),
         child: Column(
@@ -540,8 +538,8 @@ class _RegisterPageState extends State<RegisterPage> with TickerProviderStateMix
         Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: successGreen.withOpacity(0.1),
-            border: Border.all(color: successGreen.withOpacity(0.3)),
+            color: successGreen.withValues(alpha: 0.1),
+            border: Border.all(color: successGreen.withValues(alpha: 0.3)),
             borderRadius: BorderRadius.circular(12),
           ),
           child: Text(
@@ -735,6 +733,7 @@ class _RegisterPageState extends State<RegisterPage> with TickerProviderStateMix
         setState(() => _success = 'Registro exitoso');
         if (mounted) {
           Future.delayed(Duration(seconds: 2), () {
+            if (!mounted) return;
             Navigator.pushReplacementNamed(context, '/dashboard');
           });
         }
