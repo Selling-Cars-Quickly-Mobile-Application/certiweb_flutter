@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'public/pages/register/register_page.dart';
 import 'certifications/components/dashboard/dashboard_page.dart';
+import 'certifications/components/reservation/reservation.dart';
 import 'public/pages/login/login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'public/services/auth_service.dart';
 
 void main() {
   runApp(const MyApp());
@@ -39,6 +41,7 @@ class MyApp extends StatelessWidget {
         '/register': (context) => const RegisterPage(),
         '/login': (context) => const LoginPage(),
         '/dashboard': (context) => const DashboardPage(),
+        '/reservation': (context) => const ReservationPage(),
       },
     );
   }
@@ -63,10 +66,14 @@ class _StartupPageState extends State<_StartupPage> {
     final token = prefs.getString('authToken');
     if (!mounted) return;
     if (token != null) {
-      Navigator.pushReplacementNamed(context, '/dashboard');
-    } else {
-      Navigator.pushReplacementNamed(context, '/login');
+      final ok = await AuthService().refreshSession();
+      if (!mounted) return;
+      if (ok) {
+        Navigator.pushReplacementNamed(context, '/dashboard');
+        return;
+      }
     }
+    Navigator.pushReplacementNamed(context, '/login');
   }
 
   @override
