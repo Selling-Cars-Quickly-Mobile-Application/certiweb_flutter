@@ -12,6 +12,12 @@ class DioClient {
         final token = prefs.getString('authToken');
         if (token != null) {
           options.headers['Authorization'] = 'Bearer $token';
+          assert(() {
+            // debug print solo en modo debug
+            // ignore: avoid_print
+            print('Authorization attached');
+            return true;
+          }());
         }
         handler.next(options);
       },
