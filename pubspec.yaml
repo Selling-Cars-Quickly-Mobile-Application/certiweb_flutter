@@ -37,6 +37,7 @@ dependencies:
   dio: ^5.5.0
   shared_preferences: ^2.3.2
   crypto: ^3.0.3
+  file_picker: ^8.1.2
 
 dev_dependencies:
   flutter_test:
