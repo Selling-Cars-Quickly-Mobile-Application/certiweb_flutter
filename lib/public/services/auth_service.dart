@@ -1,5 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dio/dio.dart';
+import 'dart:convert';
 import '../../config/dio_client.dart';
 
 class AuthService {
@@ -12,13 +13,13 @@ class AuthService {
       if (data['token'] != null) {
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('authToken', data['token']);
-        await prefs.setString('currentUser', {
+        await prefs.setString('currentUser', jsonEncode({
           'id': data['id'],
           'name': data['name'],
           'email': data['email'],
           'plan': data['plan']
-        }.toString());
-        await prefs.setString('currentSession', {
+        }));
+        await prefs.setString('currentSession', jsonEncode({
           'userId': data['id'],
           'name': data['name'],
           'email': data['email'],
@@ -26,7 +27,7 @@ class AuthService {
           'isLoggedIn': true,
           'isAdmin': false,
           'lastLogin': DateTime.now().toIso8601String()
-        }.toString());
+        }));
       }
       return {'success': true, 'user': data};
     } on DioException catch (e) {
@@ -46,20 +47,20 @@ class AuthService {
       if (data['token'] != null) {
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('authToken', data['token']);
-        await prefs.setString('currentUser', {
+        await prefs.setString('currentUser', jsonEncode({
           'id': data['id'],
           'name': data['name'],
           'email': data['email'],
           'plan': data['plan']
-        }.toString());
-        await prefs.setString('currentSession', {
+        }));
+        await prefs.setString('currentSession', jsonEncode({
           'userId': data['id'],
           'name': data['name'],
           'email': data['email'],
           'plan': data['plan'],
           'isLoggedIn': true,
           'isAdmin': false
-        }.toString());
+        }));
       }
       return {'success': true, 'user': data};
     } on DioException catch (e) {
@@ -82,22 +83,22 @@ class AuthService {
       if (data['token'] != null) {
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('authToken', data['token']);
-        await prefs.setString('currentUser', {
+        await prefs.setString('currentUser', jsonEncode({
           'id': data['id'],
           'name': data['name'],
           'email': data['email'],
           'isAdmin': true
-        }.toString());
+        }));
         await prefs.setString('adminToken', 'admin_session');
-        await prefs.setString('currentAdmin', data.toString());
-        await prefs.setString('currentSession', {
+        await prefs.setString('currentAdmin', jsonEncode(data));
+        await prefs.setString('currentSession', jsonEncode({
           'userId': data['id'],
           'name': data['name'],
           'email': data['email'],
           'isLoggedIn': true,
           'isAdmin': true,
           'lastLogin': DateTime.now().toIso8601String()
-        }.toString());
+        }));
       }
       return {'success': true, 'user': data, 'isAdmin': true};
     } on DioException catch (e) {
@@ -105,6 +106,26 @@ class AuthService {
         'success': false,
         'message': e.response?.data is Map ? e.response?.data['message'] ?? 'Administrator authentication error' : e.response?.data ?? 'Administrator authentication error'
       };
+    }
+  }
+
+  Future<bool> refreshSession() async {
+    try {
+      final res = await _dio.get('/auth/me');
+      final data = Map<String, dynamic>.from(res.data);
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('currentUser', jsonEncode(data));
+      await prefs.setString('currentSession', jsonEncode({
+        'userId': data['id'],
+        'name': data['name'],
+        'email': data['email'],
+        'isLoggedIn': true,
+        'isAdmin': data['isAdmin'] == true,
+        'lastLogin': DateTime.now().toIso8601String()
+      }));
+      return true;
+    } on DioException catch (_) {
+      return false;
     }
   }
 
