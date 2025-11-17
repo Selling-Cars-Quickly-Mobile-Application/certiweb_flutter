@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import '../../config/dio_client.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
 
 class UserService {
   final Dio _dio = DioClient.instance.dio;
@@ -11,10 +12,12 @@ class UserService {
     if (sessionStr == null) {
       throw Exception('No active session');
     }
-    final idMatch = RegExp('userId: (\\d+)').firstMatch(sessionStr);
-    final emailMatch = RegExp('email: (.*?),').firstMatch(sessionStr);
-    final userId = idMatch?.group(1);
-    final email = emailMatch?.group(1);
+    Map<String, dynamic> session = {};
+    try {
+      session = Map<String, dynamic>.from(jsonDecode(sessionStr));
+    } catch (_) {}
+    final userId = session['userId']?.toString();
+    final email = session['email']?.toString();
     try {
       if (userId != null) {
         final res = await _dio.get('/users/$userId');
@@ -31,8 +34,7 @@ class UserService {
         return user;
       }
     }
-    final nameMatch = RegExp('name: (.*?),').firstMatch(sessionStr);
-    final name = nameMatch?.group(1);
+    final name = session['name']?.toString();
     if (name != null && userId != null) {
       return {'id': userId, 'name': name, 'email': email};
     }
