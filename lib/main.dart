@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'public/pages/register/register_page.dart';
 import 'certifications/dashboard/dashboard.dart';
+import 'public/pages/login/login.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(const MyApp());
@@ -32,11 +34,45 @@ class MyApp extends StatelessWidget {
         // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
       ),
-      home: const RegisterPage(),
+      home: const _StartupPage(),
       routes: {
         '/register': (context) => const RegisterPage(),
+        '/login': (context) => const LoginPage(),
         '/dashboard': (context) => const DashboardPage(),
       },
+    );
+  }
+}
+
+class _StartupPage extends StatefulWidget {
+  const _StartupPage();
+
+  @override
+  State<_StartupPage> createState() => _StartupPageState();
+}
+
+class _StartupPageState extends State<_StartupPage> {
+  @override
+  void initState() {
+    super.initState();
+    _decideStart();
+  }
+
+  Future<void> _decideStart() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('authToken');
+    if (!mounted) return;
+    if (token != null) {
+      Navigator.pushReplacementNamed(context, '/dashboard');
+    } else {
+      Navigator.pushReplacementNamed(context, '/login');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      body: Center(child: CircularProgressIndicator()),
     );
   }
 }
