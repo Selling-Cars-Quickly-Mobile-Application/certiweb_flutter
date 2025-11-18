@@ -10,10 +10,9 @@ class DioClient {
       onRequest: (options, handler) async {
         final prefs = await SharedPreferences.getInstance();
         final token = prefs.getString('authToken');
-        if (token != null) {
+        if (token != null && token.isNotEmpty) {
           options.headers['Authorization'] = 'Bearer $token';
           assert(() {
-            // debug print solo en modo debug
             // ignore: avoid_print
             print('Authorization attached');
             return true;
