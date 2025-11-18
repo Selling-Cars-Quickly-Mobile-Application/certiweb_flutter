@@ -38,4 +38,23 @@ class ReservationService {
     final res = await _dio.get('/reservations/$id');
     return Map<String, dynamic>.from(res.data);
   }
+
+  Future<Map<String, dynamic>> updateReservationStatus(dynamic id, String status) async {
+    try {
+      assert(() { print('PUT /reservations/$id body={"status":"$status"}'); return true; }());
+      final res = await _dio.put(
+        '/reservations/$id',
+        data: {'status': status},
+        options: Options(headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}),
+      );
+      return Map<String, dynamic>.from(res.data);
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 400 || e.response?.statusCode == 401) {
+        print('Error al actualizar estado de reserva $id -> $status');
+        print('Headers: ${e.requestOptions.headers}');
+        print('Respuesta: ${e.response?.data}');
+      }
+      rethrow;
+    }
+  }
 }
