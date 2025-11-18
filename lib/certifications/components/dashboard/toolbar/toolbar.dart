@@ -424,6 +424,7 @@ class _ToolbarState extends State<Toolbar> with TickerProviderStateMixin {
         color: Colors.transparent,
         child: InkWell(
           onTap: () {
+            _closeSidebar();
             _auth.logout();
             Navigator.pushNamedAndRemoveUntil(context, '/login', (_) => false);
           },
