@@ -320,7 +320,7 @@ class _LoginPageState extends State<LoginPage> {
       final adminResult = await _auth.loginAdmin(_email.text, _password.text);
       if (adminResult['success'] == true) {
         setState(() { _success = 'Inicio de sesión de administrador'; });
-        if (mounted) Navigator.pushReplacementNamed(context, '/dashboard');
+        if (mounted) Navigator.pushReplacementNamed(context, '/admin-certification');
         return;
       }
       setState(() { _error = 'Credenciales incorrectas. Verifica correo y contraseña.'; });
