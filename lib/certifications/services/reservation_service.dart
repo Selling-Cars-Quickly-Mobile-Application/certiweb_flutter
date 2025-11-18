@@ -39,6 +39,11 @@ class ReservationService {
     return Map<String, dynamic>.from(res.data);
   }
 
+  Future<List<Map<String, dynamic>>> getReservationsByUserId(int userId) async {
+    final res = await _dio.get('/reservations/user/$userId');
+    return List<Map<String, dynamic>>.from(res.data);
+  }
+
   Future<Map<String, dynamic>> updateReservationStatus(dynamic id, String status) async {
     try {
       assert(() { print('PUT /reservations/$id body={"status":"$status"}'); return true; }());
