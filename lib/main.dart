@@ -7,6 +7,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'public/services/auth_service.dart';
 import 'certifications/components/admin-certification/admin-certification.dart';
 import 'public/pages/login/admin_login_page.dart';
+import 'public/pages/profile/profile.dart';
+import 'public/pages/info/support.dart';
+import 'public/pages/info/terms-of-use.dart';
+import 'public/pages/history/history.dart';
 
 void main() {
   runApp(const MyApp());
@@ -46,6 +50,10 @@ class MyApp extends StatelessWidget {
         '/reservation': (context) => const ReservationPage(),
         '/admin-login': (context) => const AdminLoginPage(),
         '/admin-certification': (context) => const AdminCertificationPage(),
+        '/profile': (context) => const ProfilePage(),
+        '/history': (context) => const HistoryPage(),
+        '/support': (context) => const SupportPage(),
+        '/terms-of-use': (context) => const TermsOfUsePage(),
       },
     );
   }
