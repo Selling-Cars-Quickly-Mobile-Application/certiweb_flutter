@@ -5,6 +5,8 @@ import 'certifications/components/reservation/reservation.dart';
 import 'public/pages/login/login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'public/services/auth_service.dart';
+import 'certifications/components/admin-certification/admin-certification.dart';
+import 'public/pages/login/admin_login_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -42,6 +44,8 @@ class MyApp extends StatelessWidget {
         '/login': (context) => const LoginPage(),
         '/dashboard': (context) => const DashboardPage(),
         '/reservation': (context) => const ReservationPage(),
+        '/admin-login': (context) => const AdminLoginPage(),
+        '/admin-certification': (context) => const AdminCertificationPage(),
       },
     );
   }
@@ -63,8 +67,13 @@ class _StartupPageState extends State<_StartupPage> {
 
   Future<void> _decideStart() async {
     final prefs = await SharedPreferences.getInstance();
+    final adminToken = prefs.getString('adminToken');
     final token = prefs.getString('authToken');
     if (!mounted) return;
+    if (adminToken != null && adminToken.isNotEmpty) {
+      Navigator.pushReplacementNamed(context, '/admin-certification');
+      return;
+    }
     if (token != null) {
       final ok = await AuthService().refreshSession();
       if (!mounted) return;
