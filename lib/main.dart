@@ -11,6 +11,8 @@ import 'public/pages/profile/profile.dart';
 import 'public/pages/info/support.dart';
 import 'public/pages/info/terms-of-use.dart';
 import 'public/pages/history/history.dart';
+import 'public/pages/car-list/CarList.dart';
+import 'public/pages/car-detail/CarDetail.dart';
 
 void main() {
   runApp(const MyApp());
@@ -54,6 +56,8 @@ class MyApp extends StatelessWidget {
         '/history': (context) => const HistoryPage(),
         '/support': (context) => const SupportPage(),
         '/terms-of-use': (context) => const TermsOfUsePage(),
+        '/cars': (context) => const CarListPage(),
+        '/car-detail': (context) => const CarDetailPage(),
       },
     );
   }
