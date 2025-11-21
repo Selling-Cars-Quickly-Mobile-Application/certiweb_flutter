@@ -243,8 +243,23 @@ class _SearchFiltersState extends State<SearchFilters> {
                     onPressed: _brand == null
                         ? null
                         : () {
-                            final qp = {'brand': _brand, if (_model != null) 'model': _model};
-                            Navigator.pushNamed(context, '/cars', arguments: qp);
+                            final filteredCars = _cars.where((car) {
+                              final carBrand = (car['brand'] ?? '').toString().toLowerCase();
+                              final matchesBrand = carBrand == _brand!.toLowerCase();
+                              if (_model != null) {
+                                final carModel = (car['model'] ?? '').toString().toLowerCase();
+                                return matchesBrand && carModel == _model!.toLowerCase();
+                              }
+                              return matchesBrand;
+                            }).toList();
+                            if (filteredCars.isEmpty) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('No hay autos de esta marca')),
+                              );
+                            } else {
+                              final qp = {'brand': _brand, if (_model != null) 'model': _model};
+                              Navigator.pushNamed(context, '/cars', arguments: qp);
+                            }
                           },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF3b82f6),
