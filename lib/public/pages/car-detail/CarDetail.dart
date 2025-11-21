@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+ 
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:url_launcher/url_launcher.dart';
 import '../../../certifications/services/car_service.dart';
 
 class CarDetailPage extends StatefulWidget {
@@ -57,6 +60,39 @@ class _CarDetailPageState extends State<CarDetailPage> {
       setState(() { _loadingPdf = false; });
     }
   }
+
+  void _previewPdfInApp() {
+    if (_carPdf == null || _carPdf!.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('No hay PDF para visualizar')));
+      return;
+    }
+    if (kIsWeb) {
+      final url = Uri.parse(_carPdf!);
+      launchUrl(url);
+      return;
+    }
+    Navigator.pushNamed(context, '/car-pdf', arguments: {'data': _carPdf});
+  }
+
+  Future<void> _contactSellerByEmail() async {
+    final brand = (_car?['brand'] ?? '').toString();
+    final model = (_car?['model'] ?? '').toString();
+    final plate = (_car?['licensePlate'] ?? (_car?['placa'] ?? '')).toString();
+    final email = ((_car?['sellerEmail'] ?? _car?['ownerEmail'] ?? _car?['email'] ?? _car?['propietarioEmail'])?.toString()) ?? '';
+    if (email.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('No hay correo del anunciante')));
+      return;
+    }
+    final subject = 'Interés en vehículo $brand $model';
+    final body = 'Hola, me interesa el auto.\nMarca: $brand\nModelo: $model\nPlaca: $plate';
+    final uri = Uri(scheme: 'mailto', path: email, queryParameters: {'subject': subject, 'body': body});
+    final ok = await launchUrl(uri);
+    if (!ok) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('No se pudo abrir el cliente de correo')));
+    }
+  }
+
+  
 
   String _formatCurrency(dynamic value) {
     final numValue = value is String ? double.tryParse(value) : (value is num ? value.toDouble() : null);
@@ -128,9 +164,9 @@ class _CarDetailPageState extends State<CarDetailPage> {
                                 const Center(child: CircularProgressIndicator())
                               else if (_carPdf != null)
                                 Row(children: [
-                                  ElevatedButton(onPressed: () { ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Abrir PDF: disponible al habilitar apertura externa'))); }, style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF1E4D2B), foregroundColor: Colors.white), child: const Text('Ver')),
-                                  const SizedBox(width: 8),
-                                  ElevatedButton(onPressed: () { ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Descargar PDF: disponible al habilitar apertura externa'))); }, style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF2D6B3F), foregroundColor: Colors.white), child: const Text('Descargar')),
+                                  ElevatedButton(onPressed: _previewPdfInApp, style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF1E4D2B), foregroundColor: Colors.white), child: const Text('Ver')),
+                                  const SizedBox(width: 10),
+                                  ElevatedButton(onPressed: _contactSellerByEmail, style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF1E4D2B), foregroundColor: Colors.white), child: const Text('Contactar')),
                                 ])
                               else
                                 const Text('Error al cargar la certificación PDF'),
