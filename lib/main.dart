@@ -13,6 +13,7 @@ import 'public/pages/info/terms-of-use.dart';
 import 'public/pages/history/history.dart';
 import 'public/pages/car-list/CarList.dart';
 import 'public/pages/car-detail/CarDetail.dart';
+import 'public/pages/car-detail/car_pdf_viewer.dart';
 
 void main() {
   runApp(const MyApp());
@@ -58,6 +59,7 @@ class MyApp extends StatelessWidget {
         '/terms-of-use': (context) => const TermsOfUsePage(),
         '/cars': (context) => const CarListPage(),
         '/car-detail': (context) => const CarDetailPage(),
+        '/car-pdf': (context) => const CarPdfViewerPage(),
       },
     );
   }
