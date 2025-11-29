@@ -39,7 +39,11 @@ jobs:
 
       - name: Execute Gradle command - assembleDebug
         working-directory: android
-        run: ./gradlew assembleDebug
+        run: ./gradlew assembleDebug --no-daemon --stacktrace
+
+      - name: List files in build directory (Debug)
+        run: find android/app/build/outputs/apk -type f
+        if: always()
 
       - name: Upload Artifact to Firebase App Distribution
         uses: wzieba/Firebase-Distribution-Github-Action@v1
