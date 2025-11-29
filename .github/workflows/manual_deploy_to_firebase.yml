@@ -37,12 +37,11 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x android/gradlew
 
-      - name: Execute Gradle command - assembleDebug
-        working-directory: android
-        run: ./gradlew assembleDebug --no-daemon --stacktrace
+      - name: Build APK (Debug)
+        run: flutter build apk --debug
 
       - name: List files in build directory (Debug)
-        run: find android/app/build/outputs/apk -type f
+        run: find build/app/outputs/apk -type f
         if: always()
 
       - name: Upload Artifact to Firebase App Distribution
@@ -51,5 +50,5 @@ jobs:
           appId: ${{ secrets.FIREBASE_APP_ID }}
           serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
           groups: testers
-          file: android/app/build/outputs/apk/debug/app-debug.apk
+          file: build/app/outputs/apk/debug/app-debug.apk
           releaseNotes: ${{ inputs.release_notes }}
