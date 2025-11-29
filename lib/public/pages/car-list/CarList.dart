@@ -12,17 +12,38 @@ class _CarListPageState extends State<CarListPage> {
   List<Map<String, dynamic>> _cars = [];
   bool _loading = true;
   String? _error;
+  bool _initialized = false;
+  String? _brandFilter;
+  String? _modelFilter;
 
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_initialized) return;
+    _initialized = true;
+    final args = ModalRoute.of(context)?.settings.arguments as Map?;
+    if (args != null) {
+      _brandFilter = args['brand']?.toString();
+      _modelFilter = args['model']?.toString();
+    }
     _load();
   }
 
   Future<void> _load() async {
     setState(() { _loading = true; _error = null; });
     try {
-      final data = await _service.getAllCars();
+      var data = await _service.getAllCars();
+      
+      if (_brandFilter != null && _brandFilter!.isNotEmpty) {
+        final b = _brandFilter!.toLowerCase();
+        data = data.where((c) => (c['brand'] ?? '').toString().toLowerCase() == b).toList();
+      }
+      
+      if (_modelFilter != null && _modelFilter!.isNotEmpty) {
+        final m = _modelFilter!.toLowerCase();
+        data = data.where((c) => (c['model'] ?? '').toString().toLowerCase() == m).toList();
+      }
+
       _cars = data;
     } catch (e) {
       _error = 'No se pudo cargar la lista de autos';
@@ -52,7 +73,12 @@ class _CarListPageState extends State<CarListPage> {
                 : _cars.isEmpty
                     ? const Center(child: Text('No hay autos disponibles'))
                     : GridView.builder(
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: crossAxisCount, crossAxisSpacing: 16, mainAxisSpacing: 16, childAspectRatio: isMobile ? 0.85 : 0.9),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: crossAxisCount,
+                          crossAxisSpacing: 16,
+                          mainAxisSpacing: 16,
+                          childAspectRatio: isMobile ? 0.72 : 0.85, // Ajustado para dar más altura y evitar overflow
+                        ),
                         itemCount: _cars.length,
                         itemBuilder: (context, i) {
                           final car = _cars[i];
@@ -79,17 +105,41 @@ class _CarListPageState extends State<CarListPage> {
                                     ),
                                   ),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.all(16),
-                                  child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                                    Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: Color(0xFF2c3e50))),
-                                    const SizedBox(height: 6),
-                                    Text('$brand - $model', style: const TextStyle(color: Color(0xFF1E4D2B), fontWeight: FontWeight.w600)),
-                                    const SizedBox(height: 4),
-                                    Text('Año $year', style: const TextStyle(color: Color(0xFF6c757d))),
-                                    const SizedBox(height: 8),
-                                    Text(description.isEmpty ? 'Sin descripción' : (description.length > 100 ? '${description.substring(0, 100)}...' : description), style: const TextStyle(color: Color(0xFF495057))),
-                                  ]),
+                                Expanded( // Usar Expanded para ocupar el espacio restante y empujar el botón al final
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(16),
+                                    child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                                      Text(
+                                        title,
+                                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: Color(0xFF2c3e50)),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      const SizedBox(height: 6),
+                                      Text(
+                                        '$brand - $model',
+                                        style: const TextStyle(color: Color(0xFF1E4D2B), fontWeight: FontWeight.w600),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Text(
+                                        'Año $year',
+                                        style: const TextStyle(color: Color(0xFF6c757d)),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      const SizedBox(height: 8),
+                                      Expanded( // Permitir que la descripción ocupe el espacio disponible
+                                        child: Text(
+                                          description.isEmpty ? 'Sin descripción' : description,
+                                          style: const TextStyle(color: Color(0xFF495057)),
+                                          maxLines: 3,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                    ]),
+                                  ),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),

@@ -61,6 +61,19 @@ class MyApp extends StatelessWidget {
         '/car-detail': (context) => const CarDetailPage(),
         '/car-pdf': (context) => const CarPdfViewerPage(),
       },
+      onGenerateRoute: (settings) {
+        // Handle /car-detail/:id
+        if (settings.name != null && settings.name!.startsWith('/car-detail/')) {
+          final id = settings.name!.split('/').last;
+          if (id.isNotEmpty) {
+            return MaterialPageRoute(
+              builder: (context) => const CarDetailPage(),
+              settings: RouteSettings(arguments: {'id': id}),
+            );
+          }
+        }
+        return null;
+      },
     );
   }
 }
