@@ -112,9 +112,12 @@ class _StartupPageState extends State<_StartupPage> {
       return;
     }
     if (token != null) {
-      final ok = await AuthService().refreshSession();
+      await AuthService().refreshSession();
       if (!mounted) return;
-      if (ok) {
+      
+      await prefs.reload();
+      final currentToken = prefs.getString('authToken');
+      if (currentToken != null) {
         Navigator.pushReplacementNamed(context, '/dashboard');
         return;
       }

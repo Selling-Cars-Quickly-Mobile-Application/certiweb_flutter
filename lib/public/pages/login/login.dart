@@ -93,24 +93,27 @@ class _LoginPageState extends State<LoginPage> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Row(
-                                children: [
-                                  SizedBox(
-                                    height: 24,
-                                    width: 24,
-                                    child: Checkbox(
-                                      value: _rememberMe,
-                                      onChanged: (v) => setState(() => _rememberMe = v ?? false),
-                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-                                      activeColor: const Color(0xFF1E4D2B),
+                              GestureDetector(
+                                onTap: () => setState(() => _rememberMe = !_rememberMe),
+                                child: Row(
+                                  children: [
+                                    SizedBox(
+                                      height: 24,
+                                      width: 24,
+                                      child: Checkbox(
+                                        value: _rememberMe,
+                                        onChanged: (v) => setState(() => _rememberMe = v ?? false),
+                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                                        activeColor: const Color(0xFF1E4D2B),
+                                      ),
                                     ),
-                                  ),
-                                  const SizedBox(width: 8),
-                                  const Text(
-                                    'Recordarme',
-                                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-                                  ),
-                                ],
+                                    const SizedBox(width: 8),
+                                    const Text(
+                                      'Recordarme',
+                                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                                    ),
+                                  ],
+                                ),
                               ),
                               TextButton(
                                 onPressed: () {},
