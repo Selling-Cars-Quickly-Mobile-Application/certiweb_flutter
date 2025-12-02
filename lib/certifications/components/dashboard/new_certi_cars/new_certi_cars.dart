@@ -14,7 +14,7 @@ class _NewCertiCarsState extends State<NewCertiCars> {
       'id': '1',
       'name': 'BMW Serie 4',
       'image': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSYVcLx4pGvnOpKwlHUU49s8jkRkJDGVxaiDw&s',
-      'price': 'S/4,399.00',
+      'price': 'S/43,999.00',
       'color': 'Azul Metálico',
       'route': '/car-detail/4'
     },
@@ -22,7 +22,7 @@ class _NewCertiCarsState extends State<NewCertiCars> {
       'id': '2',
       'name': 'Ford Mustang GT',
       'image': 'https://www.vdm.ford.com/content/dam/na/ford/en_us/images/mustang/2025/jellybeans/Ford_Mustang_2025_200A_PJS_883_89W_13B_COU_64F_99H_44U_EBST_YZTAC_DEFAULT_EXT_4.png',
-      'price': 'S/4,599.00',
+      'price': 'S/45,999.00',
       'color': 'Gris',
       'route': '/car-detail/5'
     },
@@ -30,7 +30,7 @@ class _NewCertiCarsState extends State<NewCertiCars> {
       'id': '3',
       'name': 'Kia Niro',
       'image': 'https://cdn.motor1.com/images/mgl/ojyBzq/s3/kia-niro-2025.jpg',
-      'price': 'S/3,900.00',
+      'price': 'S/39,000.00',
       'color': 'Rojo',
       'route': '/car-detail/2'
     },
@@ -38,7 +38,7 @@ class _NewCertiCarsState extends State<NewCertiCars> {
       'id': '4',
       'name': 'Kia Sportage',
       'image': 'https://s3.amazonaws.com/kia-greccomotors/Sportage_blanca_01_9a1ad740c7.png',
-      'price': 'S/3,299.00',
+      'price': 'S/32,999.00',
       'color': 'Blanco Perla',
       'route': '/car-detail/3'
     },
