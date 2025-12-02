@@ -82,6 +82,15 @@ class _StartupPageState extends State<_StartupPage> {
     await Future.delayed(const Duration(milliseconds: 500));
     
     final prefs = await SharedPreferences.getInstance();
+
+    final rememberMe = prefs.getBool('rememberMe') ?? false;
+    if (!rememberMe) {
+      await prefs.remove('authToken');
+      await prefs.remove('currentUser');
+      await prefs.remove('currentSession');
+      await prefs.remove('adminToken');
+      await prefs.remove('currentAdmin');
+    }
     
     final termsAccepted = prefs.getBool('termsAccepted') ?? false;
     if (!termsAccepted) {

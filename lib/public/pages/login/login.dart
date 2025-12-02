@@ -311,13 +311,13 @@ class _LoginPageState extends State<LoginPage> {
         setState(() { _error = 'Por favor, completa los campos con datos válidos.'; _loading = false; });
         return;
       }
-      final userResult = await _auth.login(_email.text, _password.text);
+      final userResult = await _auth.login(_email.text, _password.text, _rememberMe);
       if (userResult['success'] == true) {
         setState(() { _success = 'Inicio de sesión exitoso'; });
         if (mounted) Navigator.pushReplacementNamed(context, '/dashboard');
         return;
       }
-      final adminResult = await _auth.loginAdmin(_email.text, _password.text);
+      final adminResult = await _auth.loginAdmin(_email.text, _password.text, _rememberMe);
       if (adminResult['success'] == true) {
         setState(() { _success = 'Inicio de sesión de administrador'; });
         if (mounted) Navigator.pushReplacementNamed(context, '/admin-certification');

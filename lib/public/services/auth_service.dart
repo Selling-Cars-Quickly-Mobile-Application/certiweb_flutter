@@ -6,12 +6,13 @@ import '../../config/dio_client.dart';
 class AuthService {
   final Dio _dio = DioClient.instance.dio;
 
-  Future<Map<String, dynamic>> login(String email, String password) async {
+  Future<Map<String, dynamic>> login(String email, String password, [bool rememberMe = false]) async {
     try {
       final res = await _dio.post('/auth/login', data: {'email': email, 'password': password});
       final data = Map<String, dynamic>.from(res.data);
       if (data['token'] != null) {
         final prefs = await SharedPreferences.getInstance();
+        await prefs.setBool('rememberMe', rememberMe);
         await prefs.setString('authToken', data['token']);
         await prefs.setString('currentUser', jsonEncode({
           'id': data['id'],
@@ -71,7 +72,7 @@ class AuthService {
     }
   }
 
-  Future<Map<String, dynamic>> loginAdmin(String email, String password) async {
+  Future<Map<String, dynamic>> loginAdmin(String email, String password, [bool rememberMe = false]) async {
     try {
       final res = await _dio.post('/admin_user/login', data: {'email': email, 'password': password});
       final data = Map<String, dynamic>.from(res.data);
@@ -82,6 +83,7 @@ class AuthService {
       }
       if (data['token'] != null) {
         final prefs = await SharedPreferences.getInstance();
+        await prefs.setBool('rememberMe', rememberMe);
         await prefs.setString('authToken', data['token']);
         await prefs.setString('currentUser', jsonEncode({
           'id': data['id'],
